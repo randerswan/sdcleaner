@@ -47,6 +47,7 @@ public class FileItem {
 
     public void save(){
         SQLiteOpenHelper helper = new SQLiteOpenHelper(SDCleanerApplication.getApp(), "", null, 1) {
+
             @Override
             public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
