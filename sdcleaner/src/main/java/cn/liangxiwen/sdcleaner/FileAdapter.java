@@ -1,11 +1,14 @@
 package cn.liangxiwen.sdcleaner;
 
+import android.app.Activity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -13,12 +16,41 @@ import java.util.ArrayList;
  */
 
 public class FileAdapter extends BaseAdapter {
-    private ArrayList<File> children = new ArrayList<File>();
+    private ArrayList<FileItem> children = new ArrayList<FileItem>();
+    private BlackListhelper helper;
+    private FileLister lister;
+    private FileItem.OnFileClickListener onFileClickListener;
 
-    public FileAdapter(ArrayList<File> children) {
-        if (children != null) {
-            this.children.addAll(children);
+    public FileAdapter(FileLister lister, FileItem.OnFileClickListener listener, Activity act) {
+        helper = new BlackListhelper(act, FileItem.class.getSimpleName(), null, 1);
+        this.lister = lister;
+        this.onFileClickListener = listener;
+        children.addAll(lister.getChildren());
+        initItems();
+    }
+
+    private void initItems() {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ArrayList<FileItem> record = new ArrayList<FileItem>();
+        Cursor cur = db.rawQuery("select * from FileItem", null);
+        while (cur.moveToNext()) {
+            String file = cur.getString(0);
+            int type = cur.getInt(1);
+            FileItem item = type == 1 ? FileItem.createBlackItem(file) : FileItem.createWhiteItem(file);
+            record.add(item);
         }
+        for (FileItem file : children) {
+            file.setLister(lister);
+            file.setAdapter(this);
+            file.setOnFileClickListener(onFileClickListener);
+            for (FileItem item : record) {
+                if (file.getFile().toString().equals(item.getFile().toString())) {
+                    file.setType(item.getType());
+                }
+            }
+        }
+        cur.close();
+        db.close();
     }
 
     @Override
@@ -27,7 +59,7 @@ public class FileAdapter extends BaseAdapter {
     }
 
     @Override
-    public File getItem(int i) {
+    public FileItem getItem(int i) {
         return children.get(i);
     }
 
@@ -36,15 +68,25 @@ public class FileAdapter extends BaseAdapter {
         return i;
     }
 
+    private void clearItem() {
+        for (FileItem item : children) {
+            item.clear();
+        }
+    }
+
     public void clear() {
         children.clear();
         notifyDataSetChanged();
     }
 
-    public void replaceAll(ArrayList<File> children) {
+    public void replaceAll(ArrayList<FileItem> children, boolean clearItem) {
+        if (clearItem) {
+            clearItem();
+        }
         clear();
         if (children != null) {
             this.children.addAll(children);
+            initItems();
         }
         notifyDataSetChanged();
     }
@@ -55,7 +97,14 @@ public class FileAdapter extends BaseAdapter {
             view = View.inflate(viewGroup.getContext(), R.layout.item_file, null);
         }
         TextView tvName = (TextView) view.findViewById(R.id.tv_item_file_name);
-        tvName.setText(getItem(i).getName());
+        View tvFolder = view.findViewById(R.id.tv_item_folder);
+        FileItem itemFile = getItem(i);
+        itemFile.updateCheckBox(view);
+        tvName.setText(itemFile.getFile().getName());
+        tvFolder.setVisibility(itemFile.getFile().isDirectory() ? View.VISIBLE : View.INVISIBLE);
+        view.setOnClickListener(itemFile);
+        itemFile.setIndex(i);
+
         return view;
     }
 }
