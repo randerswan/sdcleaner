@@ -2,8 +2,6 @@ package cn.liangxiwen.sdcleaner;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,15 +31,7 @@ public class FileAdapter extends BaseAdapter {
     }
 
     private void initItems() {
-        SQLiteDatabase db = helper.getWritableDatabase();
-        ArrayList<FileItem> record = new ArrayList<FileItem>();
-        Cursor cur = db.rawQuery("select * from BlackList", null);
-        while (cur.moveToNext()) {
-            String file = cur.getString(0);
-            int type = cur.getInt(1);
-            FileItem item = type == 1 ? FileItem.createBlackItem(file) : FileItem.createWhiteItem(file);
-            record.add(item);
-        }
+        ArrayList<FileItem> record = helper.queryBlackWhiteList();
         for (FileItem file : children) {
             file.setLister(lister);
             file.setAdapter(this);
@@ -53,8 +43,6 @@ public class FileAdapter extends BaseAdapter {
                 }
             }
         }
-        cur.close();
-        db.close();
     }
 
     @Override
