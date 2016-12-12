@@ -157,26 +157,15 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         if (cbBlack != null && cbWhite != null && b) {
-            boolean isWhte = compoundButton == cbWhite;
-            boolean isBlack = compoundButton == cbBlack;
-            boolean blackChecked = cbBlack.isChecked();
-            boolean whiteCheck = cbWhite.isChecked();
+            boolean isWhte = compoundButton.getId() == R.id.cb_white;
+            boolean isBlack = compoundButton.getId() == R.id.cb_black;
             if (isWhte) {
-                if (blackChecked) {
-                    cbBlack.setOnCheckedChangeListener(null);
-                    cbBlack.setChecked(false);
-                    cbBlack.setOnCheckedChangeListener(this);
-                }
                 type = FILE_TYPE_WHITE;
             }
             if (isBlack) {
-                if (whiteCheck) {
-                    cbWhite.setOnCheckedChangeListener(null);
-                    cbWhite.setChecked(false);
-                    cbWhite.setOnCheckedChangeListener(this);
-                }
                 type = FILE_TYPE_BLACK;
             }
+            adapter.notifyDataSetChanged();
         }
     }
 

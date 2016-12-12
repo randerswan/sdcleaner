@@ -1,12 +1,13 @@
 package cn.liangxiwen.sdcleaner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,11 +21,13 @@ public class FileAdapter extends BaseAdapter {
     private BlackListhelper helper;
     private FileLister lister;
     private FileItem.OnFileClickListener onFileClickListener;
+    private LayoutInflater inflater;
 
     public FileAdapter(FileLister lister, FileItem.OnFileClickListener listener, Activity act) {
         helper = new BlackListhelper(act, FileItem.class.getSimpleName(), null, 1);
         this.lister = lister;
         this.onFileClickListener = listener;
+        this.inflater = (LayoutInflater) act.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         children.addAll(lister.getChildren());
         initItems();
     }
@@ -94,7 +97,7 @@ public class FileAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (view == null) {
-            view = View.inflate(viewGroup.getContext(), R.layout.item_file, null);
+            view = inflater.inflate(R.layout.item_file, viewGroup, false);
         }
         TextView tvName = (TextView) view.findViewById(R.id.tv_item_file_name);
         View tvFolder = view.findViewById(R.id.tv_item_folder);
