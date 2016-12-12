@@ -22,7 +22,7 @@ public class FileAdapter extends BaseAdapter {
     private LayoutInflater inflater;
 
     public FileAdapter(FileLister lister, FileItem.OnFileClickListener listener, Activity act) {
-        helper = new BlackListhelper(act, FileItem.class.getSimpleName(), null, 1);
+        helper = new BlackListhelper(act, null, 1);
         this.lister = lister;
         this.onFileClickListener = listener;
         this.inflater = (LayoutInflater) act.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

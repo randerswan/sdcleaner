@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 public class BlackListhelper extends SQLiteOpenHelper {
 
-    public BlackListhelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    public BlackListhelper(Context context, SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, FileItem.class.getSimpleName(), factory, version);
     }
 
-    public BlackListhelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
-        super(context, name, factory, version, errorHandler);
+    public BlackListhelper(Context context, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
+        super(context, FileItem.class.getSimpleName(), factory, version, errorHandler);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class BlackListhelper extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList<FileItem> queryBlackWhiteList(){
+    public ArrayList<FileItem> queryBlackWhiteList() {
         SQLiteDatabase db = getWritableDatabase();
         ArrayList<FileItem> record = new ArrayList<FileItem>();
         Cursor cur = db.rawQuery("select * from BlackList", null);

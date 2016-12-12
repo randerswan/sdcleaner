@@ -9,9 +9,9 @@ import android.widget.CompoundButton;
 import java.io.File;
 
 public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
-    public static final byte FILE_TYPE_NONE = 0;
-    public static final byte FILE_TYPE_BLACK = 1;
-    public static final byte FILE_TYPE_WHITE = 2;
+    public static final byte FILE_TYPE_NONE = 1;
+    public static final byte FILE_TYPE_BLACK = 2;
+    public static final byte FILE_TYPE_WHITE = 3;
 
     private String file;
     private String remark;
@@ -126,9 +126,6 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
 
         cbWhite.setChecked(isInWhiteList());
         cbBlack.setChecked(isInBlackList());
-        if (isInBlackList() || isInWhiteList()) {
-            save();
-        }
     }
 
     public void save() {
@@ -137,7 +134,7 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
         cv.put("whiteOrBlack", type);
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
-            long result = db.update("BlackList", cv, " 'BlackPath'=? ", new String[]{file.toString()});
+            long result = db.update("BlackList", cv, " FilePath=? ", new String[]{file.toString()});
             if (result <= 0) {
                 db.insert("BlackList", null, cv);
             }
@@ -164,17 +161,19 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        if (cbBlack != null && cbWhite != null && b) {
-            boolean isWhte = compoundButton.getId() == R.id.cb_white;
-            boolean isBlack = compoundButton.getId() == R.id.cb_black;
+        if (cbBlack != null && cbWhite != null) {
+            boolean isWhte = compoundButton.getId() == R.id.cb_white && b;
+            boolean isBlack = compoundButton.getId() == R.id.cb_black && b;
             if (isWhte) {
                 type = FILE_TYPE_WHITE;
-            }
-            if (isBlack) {
+            } else if (isBlack) {
                 type = FILE_TYPE_BLACK;
+            } else {
+                type = FILE_TYPE_NONE;
             }
             adapter.notifyDataSetChanged();
         }
+        save();
     }
 
     public interface OnFileClickListener {

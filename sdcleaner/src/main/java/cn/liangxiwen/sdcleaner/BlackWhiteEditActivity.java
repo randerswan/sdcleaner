@@ -6,7 +6,7 @@ import android.view.KeyEvent;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class SDCleanerMainActivity extends SCBaseActivity implements FileItem.OnFileClickListener {
+public class BlackWhiteEditActivity extends SCBaseActivity implements FileItem.OnFileClickListener {
     private FileAdapter adapter;
     private FileLister lister;
     private ListView lvFiles;

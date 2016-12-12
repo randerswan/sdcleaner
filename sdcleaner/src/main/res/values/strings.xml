@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SDCleaner</string>
+
+    <string name="cleaner_main_black_white_edit">黑白名单编辑</string>
+    <string name="cleaner_main_clear_black">清理黑名单</string>
+    <string name="cleaner_main_clear_start">清理黑名单</string>
+    <string name="cleaner_main_clear_end">清理黑名单完毕</string>
+
 </resources>

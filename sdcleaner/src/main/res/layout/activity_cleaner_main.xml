@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_cleaner_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_large"
+    tools:context="cn.liangxiwen.sdcleaner.CleanerMainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tv_cleaner_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="true" />
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/bn_cleaner_black_white_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_base"
+        android:text="@string/cleaner_main_black_white_edit" />
+
+    <Button
+        android:id="@+id/bn_cleaner_black_clear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_base"
+        android:text="@string/cleaner_main_clear_black" />
+
+</LinearLayout>

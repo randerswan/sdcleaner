@@ -35,4 +35,5 @@ public class SCBaseActivity extends Activity {
     public <T extends Activity> T getThis() {
         return (T) SCBaseActivity.this;
     }
+
 }
