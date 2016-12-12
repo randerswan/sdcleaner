@@ -50,7 +50,9 @@ public class CleanerMainActivity extends SCBaseActivity implements CleanLogInter
             ArrayList<FileItem> list = helper.queryBlackWhiteList();
             ArrayList<File> clearList = new ArrayList<File>();
             for (FileItem item : list) {
-                clearList.add(item.getFile());
+                if (item.isInBlackList()) {
+                    clearList.add(item.getFile());
+                }
             }
             cleanThread = new CleanThread(clearList);
             cleanThread.setCleanListener(CleanerMainActivity.this);

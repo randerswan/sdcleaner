@@ -52,7 +52,7 @@ public class CleanThread extends Thread {
     }
 
     private void clearIfNotFolder(File file) {
-        if (!file.isDirectory()) {
+        if (file.isDirectory()) {
             File[] children = file.listFiles();
             if (children != null) {
                 for (File child : children) {
@@ -66,7 +66,7 @@ public class CleanThread extends Thread {
             }
             int len = file.listFiles() != null ? file.listFiles().length : 0;
             if (len == 0) {
-//                file.delete();
+                file.delete();
                 if (handler != null && cleanListener != null) {
                     handler.post(new ClearRunnalbe(file, cleanListener, "文件夹已空，删除文件夹"));
                 }
@@ -76,7 +76,7 @@ public class CleanThread extends Thread {
                 }
             }
         } else {
-//            file.delete();
+            file.delete();
             if (handler != null && cleanListener != null) {
                 handler.post(new ClearRunnalbe(file, cleanListener, "删除文件"));
             }
