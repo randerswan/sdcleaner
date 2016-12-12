@@ -35,7 +35,7 @@ public class FileAdapter extends BaseAdapter {
     private void initItems() {
         SQLiteDatabase db = helper.getWritableDatabase();
         ArrayList<FileItem> record = new ArrayList<FileItem>();
-        Cursor cur = db.rawQuery("select * from FileItem", null);
+        Cursor cur = db.rawQuery("select * from BlackList", null);
         while (cur.moveToNext()) {
             String file = cur.getString(0);
             int type = cur.getInt(1);
@@ -46,6 +46,7 @@ public class FileAdapter extends BaseAdapter {
             file.setLister(lister);
             file.setAdapter(this);
             file.setOnFileClickListener(onFileClickListener);
+            file.setHelper(helper);
             for (FileItem item : record) {
                 if (file.getFile().toString().equals(item.getFile().toString())) {
                     file.setType(item.getType());

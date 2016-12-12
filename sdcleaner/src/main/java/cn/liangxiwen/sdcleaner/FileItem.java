@@ -23,6 +23,8 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
     private CheckBox cbWhite;
     private CheckBox cbBlack;
 
+    private BlackListhelper helper;
+
     public FileItem() {
     }
 
@@ -111,6 +113,10 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
         this.remark = remark;
     }
 
+    public void setHelper(BlackListhelper helper) {
+        this.helper = helper;
+    }
+
     public void updateCheckBox(View view) {
         cbWhite = (CheckBox) view.findViewById(R.id.cb_white);
         cbBlack = (CheckBox) view.findViewById(R.id.cb_black);
@@ -120,6 +126,9 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
 
         cbWhite.setChecked(isInWhiteList());
         cbBlack.setChecked(isInBlackList());
+        if (isInBlackList() || isInWhiteList()) {
+            save();
+        }
     }
 
     public void save() {
@@ -128,7 +137,8 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
         cv.put("whiteOrBlack", type);
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
-            if (db.update("BlackList", cv, " 'BlackPath'=? ", new String[]{file.toString()}) <= 0) {
+            long result = db.update("BlackList", cv, " 'BlackPath'=? ", new String[]{file.toString()});
+            if (result <= 0) {
                 db.insert("BlackList", null, cv);
             }
         } catch (Exception e) {
@@ -142,8 +152,6 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
         lister = null;
         onFileClickListener = null;
     }
-
-    private BlackListhelper helper = new BlackListhelper(SDCleanerApplication.getApp(), FileItem.class.getSimpleName(), null, 1);
 
     @Override
     public void onClick(View view) {
