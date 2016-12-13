@@ -35,8 +35,16 @@ public class BlackListhelper extends SQLiteOpenHelper {
         while (cur.moveToNext()) {
             String file = cur.getString(0);
             int type = cur.getInt(1);
-            FileItem item = type == 1 ? FileItem.createBlackItem(file) : FileItem.createWhiteItem(file);
-            record.add(item);
+            if (type == FileItem.FILE_TYPE_WHITE) {
+                FileItem item = FileItem.createWhiteItem(file);
+                record.add(item);
+            } else if (type == FileItem.FILE_TYPE_BLACK) {
+                FileItem item = FileItem.createBlackItem(file);
+                record.add(item);
+            } else {
+                FileItem item = FileItem.createNormalItem(file);
+                record.add(item);
+            }
         }
         cur.close();
         db.close();

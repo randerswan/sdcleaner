@@ -91,11 +91,11 @@ public class FileAdapter extends BaseAdapter {
         TextView tvName = (TextView) view.findViewById(R.id.tv_item_file_name);
         View tvFolder = view.findViewById(R.id.tv_item_folder);
         FileItem itemFile = getItem(i);
+        itemFile.setIndex(i);
         itemFile.updateCheckBox(view);
         tvName.setText(itemFile.getFile().getName());
         tvFolder.setVisibility(itemFile.getFile().isDirectory() ? View.VISIBLE : View.INVISIBLE);
         view.setOnClickListener(itemFile);
-        itemFile.setIndex(i);
 
         return view;
     }

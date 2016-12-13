@@ -20,8 +20,6 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
     private int index;
     private FileAdapter adapter;
     private OnFileClickListener onFileClickListener;
-    private CheckBox cbWhite;
-    private CheckBox cbBlack;
 
     private BlackListhelper helper;
 
@@ -118,14 +116,16 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
     }
 
     public void updateCheckBox(View view) {
-        cbWhite = (CheckBox) view.findViewById(R.id.cb_white);
-        cbBlack = (CheckBox) view.findViewById(R.id.cb_black);
-
-        cbWhite.setOnCheckedChangeListener(this);
-        cbBlack.setOnCheckedChangeListener(this);
+        CheckBox cbWhite = (CheckBox) view.findViewById(R.id.cb_white);
+        CheckBox cbBlack = (CheckBox) view.findViewById(R.id.cb_black);
+        cbWhite.setOnCheckedChangeListener(null);
+        cbBlack.setOnCheckedChangeListener(null);
 
         cbWhite.setChecked(isInWhiteList());
         cbBlack.setChecked(isInBlackList());
+
+        cbWhite.setOnCheckedChangeListener(this);
+        cbBlack.setOnCheckedChangeListener(this);
     }
 
     public void save() {
@@ -142,6 +142,7 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
             String msg = e.getMessage();
             System.out.println(msg);
         }
+        db.close();
     }
 
     public void clear() {
@@ -161,18 +162,15 @@ public class FileItem implements View.OnClickListener, CompoundButton.OnCheckedC
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        if (cbBlack != null && cbWhite != null) {
-            boolean isWhte = compoundButton.getId() == R.id.cb_white && b;
-            boolean isBlack = compoundButton.getId() == R.id.cb_black && b;
-            if (isWhte) {
-                type = FILE_TYPE_WHITE;
-            } else if (isBlack) {
-                type = FILE_TYPE_BLACK;
-            } else {
-                type = FILE_TYPE_NONE;
-            }
-            adapter.notifyDataSetChanged();
+        boolean isWhite = compoundButton.getId() == R.id.cb_white;
+        boolean isBlack = compoundButton.getId() == R.id.cb_black;
+        if (isWhite) {
+            type = b ? FILE_TYPE_WHITE : FILE_TYPE_NONE;
         }
+        if (isBlack) {
+            type = b ? FILE_TYPE_BLACK : FILE_TYPE_NONE;
+        }
+        adapter.notifyDataSetChanged();
         save();
     }
 
