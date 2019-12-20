@@ -3,13 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:padding="@dimen/padding_large">
+    android:padding="@dimen/padding_base">
 
     <TextView
         android:id="@+id/tv_item_file_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/tv_item_file_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -20,11 +25,13 @@
 
         <CheckBox
             android:id="@+id/cb_white"
+            android:text="w"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <CheckBox
             android:id="@+id/cb_black"
+            android:text="b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

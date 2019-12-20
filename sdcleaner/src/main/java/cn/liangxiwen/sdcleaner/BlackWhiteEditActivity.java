@@ -18,6 +18,7 @@ public class BlackWhiteEditActivity extends SCBaseActivity implements FileItem.O
         setContentView(R.layout.activity_sdcleaner_main);
         initViews();
         initList();
+        new com.scandemo.PermissionGrant(this).requestAllPermission();
     }
 
     private void initViews() {

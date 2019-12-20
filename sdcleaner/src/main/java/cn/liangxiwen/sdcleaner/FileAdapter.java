@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  *
@@ -89,11 +91,20 @@ public class FileAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.item_file, viewGroup, false);
         }
         TextView tvName = (TextView) view.findViewById(R.id.tv_item_file_name);
+        TextView tvSize = (TextView) view.findViewById(R.id.tv_item_file_size);
         View tvFolder = view.findViewById(R.id.tv_item_folder);
         FileItem itemFile = getItem(i);
         itemFile.setIndex(i);
         itemFile.updateCheckBox(view);
         tvName.setText(itemFile.getFile().getName());
+        try {
+            if (!itemFile.getFile().isDirectory()) {
+                tvSize.setText(NumberFormat.getInstance(Locale.CHINA).format(itemFile.getFile().length()));
+            } else {
+                tvSize.setText(itemFile.getFile().listFiles().length + "项");
+            }
+        } catch (Exception ignore) {
+        }
         tvFolder.setVisibility(itemFile.getFile().isDirectory() ? View.VISIBLE : View.INVISIBLE);
         view.setOnClickListener(itemFile);
 
